@@ -128,6 +128,7 @@ class ChromaDB_VectorStore(VannaBase):
             # Extract the documents and ids
             documents = [doc for doc in ddl_data["documents"]]
             ids = ddl_data["ids"]
+            metadatas = sql_data.get("metadatas", [{} for _ in ids])
 
             # Create a DataFrame
             df_ddl = pd.DataFrame(
@@ -135,6 +136,7 @@ class ChromaDB_VectorStore(VannaBase):
                     "id": ids,
                     "question": [None for doc in documents],
                     "content": [doc for doc in documents],
+                    "metadata": metadatas,
                 }
             )
 
