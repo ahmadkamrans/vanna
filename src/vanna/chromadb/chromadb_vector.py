@@ -251,30 +251,30 @@ class ChromaDB_VectorStore(VannaBase):
         )
 
     def get_related_documentation(self, question: str, **kwargs) -> list:
-    try:
-        metadata = document_metadata
-        if metadata:
-            raw = self.documentation_collection.query(
-                query_texts=[question],
-                n_results=self.n_results_documentation,
-                where=metadata,
-            )
-        else:
-            raw = self.documentation_collection.query(
-                query_texts=[question],
-                n_results=self.n_results_documentation,
-            )
-    except TypeError:
-        if metadata:
-            raw = self.documentation_collection.query(
-                query_texts=[question],
-                n_results=self.n_results_documentation,
-                filters=metadata,
-            )
-        else:
-            raw = self.documentation_collection.query(
-                query_texts=[question],
-                n_results=self.n_results_documentation,
-            )
+        try:
+            metadata = document_metadata
+            if metadata:
+                raw = self.documentation_collection.query(
+                    query_texts=[question],
+                    n_results=self.n_results_documentation,
+                    where=metadata,
+                )
+            else:
+                raw = self.documentation_collection.query(
+                    query_texts=[question],
+                    n_results=self.n_results_documentation,
+                )
+        except TypeError:
+            if metadata:
+                raw = self.documentation_collection.query(
+                    query_texts=[question],
+                    n_results=self.n_results_documentation,
+                    filters=metadata,
+                )
+            else:
+                raw = self.documentation_collection.query(
+                    query_texts=[question],
+                    n_results=self.n_results_documentation,
+                )
 
-    return ChromaDB_VectorStore._extract_documents(raw)
+        return ChromaDB_VectorStore._extract_documents(raw)
