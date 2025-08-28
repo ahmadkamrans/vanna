@@ -265,6 +265,7 @@ class ChromaDB_VectorStore(VannaBase):
                     n_results=self.n_results_documentation,
                     where=metadata,
                 )
+                print(f"Raw: {raw}")
             else:
                 print("Not Using metadata filtering")
                 raw = self.documentation_collection.query(
