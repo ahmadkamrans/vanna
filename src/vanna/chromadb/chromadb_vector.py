@@ -257,13 +257,13 @@ class ChromaDB_VectorStore(VannaBase):
     def get_related_documentation(self, question: str, **kwargs) -> list:
         try:
             metadata = self.document_metadata
-            print(f"Metadata: {metadata}")
             if metadata:
+                print(f"Metadata: {metadata}")
                 print("Using metadata filtering")
                 raw = self.documentation_collection.query(
                     query_texts=[question],
                     n_results=self.n_results_documentation,
-                    where=metadata,
+                    where={"table": metadata},
                 )
                 print(f"Raw: {raw}")
             else:
