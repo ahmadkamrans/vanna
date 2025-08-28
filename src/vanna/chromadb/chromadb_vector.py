@@ -22,7 +22,7 @@ class ChromaDB_VectorStore(VannaBase):
         self.embedding_function = config.get("embedding_function", default_ef)
         curr_client = config.get("client", "persistent")
         collection_metadata = config.get("collection_metadata", None)
-        document_metadata = config.get("document_metadata", None)
+        self.document_metadata = config.get("document_metadata", None)
         self.n_results_sql = config.get("n_results_sql", config.get("n_results", 10))
         self.n_results_documentation = config.get("n_results_documentation", config.get("n_results", 10))
         self.n_results_ddl = config.get("n_results_ddl", config.get("n_results", 10))
@@ -95,7 +95,7 @@ class ChromaDB_VectorStore(VannaBase):
             documents=documentation,
             embeddings=self.generate_embedding(documentation),
             ids=id,
-            metadatas=document_metadata
+            metadatas=self.document_metadata
         )
         return id
 
@@ -252,7 +252,7 @@ class ChromaDB_VectorStore(VannaBase):
 
     def get_related_documentation(self, question: str, **kwargs) -> list:
         try:
-            metadata = document_metadata
+            metadata = self.document_metadata
             if metadata:
                 raw = self.documentation_collection.query(
                     query_texts=[question],
