@@ -71,10 +71,17 @@ class ChromaDB_VectorStore(VannaBase):
             },
             ensure_ascii=False,
         )
+
+        question_json = json.dumps(
+            {
+                "question": question,
+            },
+            ensure_ascii=False,
+        )
         id = deterministic_uuid(question_sql_json) + "-sql"
         self.sql_collection.add(
             documents=question_sql_json,
-            embeddings=self.generate_embedding(question_sql_json),
+            embeddings=self.generate_embedding(question_json),
             ids=id,
         )
 
