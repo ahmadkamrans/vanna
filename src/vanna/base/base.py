@@ -132,7 +132,11 @@ class VannaBase(ABC):
             doc_list=doc_list,
             **kwargs,
         )
-        self.log(title="SQL Prompt", message=prompt)
+        # self.log(title="SQL Prompt", message=prompt)
+        print(f"Initial Prompt: {initial_prompt}")
+        print(f"Question: {question}")
+        print(f"Question SQL List: {question_sql_list}")
+        print(f"Doc List: {doc_list}")
         llm_response = self.submit_prompt(prompt, **kwargs)
         self.log(title="LLM Response", message=llm_response)
 
@@ -155,9 +159,9 @@ class VannaBase(ABC):
                         doc_list=doc_list+[f"The following is a pandas DataFrame with the results of the intermediate SQL query {intermediate_sql}: \n" + df.to_markdown()],
                         **kwargs,
                     )
-                    self.log(title="Final SQL Prompt", message=prompt)
+                    # self.log(title="Final SQL Prompt", message=prompt)
                     llm_response = self.submit_prompt(prompt, **kwargs)
-                    self.log(title="LLM Response", message=llm_response)
+                    # self.log(title="LLM Response", message=llm_response)
                 except Exception as e:
                     return f"Error running intermediate SQL: {e}"
 
