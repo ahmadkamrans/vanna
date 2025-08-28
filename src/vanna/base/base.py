@@ -615,10 +615,7 @@ class VannaBase(ABC):
         )
 
         initial_prompt += (
-            "===Response Guidelines \n"
-            "1. If the provided context is sufficient, please generate a valid SQL query without any explanations for the question. \n"
-            "4. Please use the most relevant table(s). \n"
-            f"6. Ensure that the output SQL is Postgresql-compliant and executable, and free of syntax errors. \n"
+            f"Ensure that the output SQL is Postgresql-compliant and executable, and free of syntax errors."
         )
 
         message_log = [self.system_message(initial_prompt)]
