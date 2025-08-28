@@ -104,44 +104,43 @@ class ChromaDB_VectorStore(VannaBase):
 
         df = pd.DataFrame()
 
-        # if sql_data is not None:
-        #     # Extract the documents and ids
-        #     documents = [json.loads(doc) for doc in sql_data["documents"]]
-        #     ids = sql_data["ids"]
+        if sql_data is not None:
+            # Extract the documents and ids
+            documents = [json.loads(doc) for doc in sql_data["documents"]]
+            ids = sql_data["ids"]
 
-        #     # Create a DataFrame
-        #     df_sql = pd.DataFrame(
-        #         {
-        #             "id": ids,
-        #             "question": [doc["question"] for doc in documents],
-        #             "content": [doc["sql"] for doc in documents],
-        #         }
-        #     )
+            # Create a DataFrame
+            df_sql = pd.DataFrame(
+                {
+                    "id": ids,
+                    "question": [doc["question"] for doc in documents],
+                    "content": [doc["sql"] for doc in documents],
+                }
+            )
 
-        #     df_sql["training_data_type"] = "sql"
+            df_sql["training_data_type"] = "sql"
 
-        #     df = pd.concat([df, df_sql])
+            df = pd.concat([df, df_sql])
 
-        # ddl_data = self.ddl_collection.get()
+        ddl_data = self.ddl_collection.get()
 
-        # if ddl_data is not None:
-        #     # Extract the documents and ids
-        #     documents = [doc for doc in ddl_data["documents"]]
-        #     ids = ddl_data["ids"]
+        if ddl_data is not None:
+            # Extract the documents and ids
+            documents = [doc for doc in ddl_data["documents"]]
+            ids = ddl_data["ids"]
 
-        #     # Create a DataFrame
-        #     df_ddl = pd.DataFrame(
-        #         {
-        #             "id": ids,
-        #             "question": [None for doc in documents],
-        #             "content": [doc for doc in documents],
-        #             "metadata": metadatas,
-        #         }
-        #     )
+            # Create a DataFrame
+            df_ddl = pd.DataFrame(
+                {
+                    "id": ids,
+                    "question": [None for doc in documents],
+                    "content": [doc for doc in documents],
+                }
+            )
 
-        #     df_ddl["training_data_type"] = "ddl"
+            df_ddl["training_data_type"] = "ddl"
 
-        #     df = pd.concat([df, df_ddl])
+            df = pd.concat([df, df_ddl])
 
         doc_data = self.documentation_collection.get()
 
