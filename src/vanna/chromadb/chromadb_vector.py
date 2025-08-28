@@ -258,35 +258,43 @@ class ChromaDB_VectorStore(VannaBase):
         try:
             metadata = self.document_metadata
             
+            # Convert string representation to actual dict if needed
             if metadata and isinstance(metadata, str):
                 import ast
+                import json
                 try:
+                    # First try ast.literal_eval
                     metadata = ast.literal_eval(metadata)
                 except (ValueError, SyntaxError):
-                    metadata = None
+                    try:
+                        # If that fails, try JSON parsing (in case it's JSON format)
+                        metadata = json.loads(metadata.replace("'", '"'))
+                    except (ValueError, json.JSONDecodeError):
+                        print(f"Warning: Could not parse metadata: {metadata}")
+                        metadata = None
             
-            if metadata:
+            # Debug: print the metadata type and value
+            print(f"Debug: metadata type: {type(metadata)}, value: {metadata}")
+            
+            if metadata and isinstance(metadata, dict):
+                print("Using metadata filtering")
                 raw = self.documentation_collection.query(
                     query_texts=[question],
                     n_results=self.n_results_documentation,
                     where=metadata,
                 )
             else:
+                print("No metadata filtering")
                 raw = self.documentation_collection.query(
                     query_texts=[question],
                     n_results=self.n_results_documentation,
                 )
-        except TypeError:
-            if metadata:
-                raw = self.documentation_collection.query(
-                    query_texts=[question],
-                    n_results=self.n_results_documentation,
-                    filters=metadata,
-                )
-            else:
-                raw = self.documentation_collection.query(
-                    query_texts=[question],
-                    n_results=self.n_results_documentation,
-                )
+        except (TypeError, Exception) as e:
+            print(f"Error in query with metadata: {e}")
+            # Fallback: query without metadata
+            raw = self.documentation_collection.query(
+                query_texts=[question],
+                n_results=self.n_results_documentation,
+            )
 
         return ChromaDB_VectorStore._extract_documents(raw)
