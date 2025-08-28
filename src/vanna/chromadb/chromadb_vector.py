@@ -257,6 +257,14 @@ class ChromaDB_VectorStore(VannaBase):
     def get_related_documentation(self, question: str, **kwargs) -> list:
         try:
             metadata = self.document_metadata
+            
+            if metadata and isinstance(metadata, str):
+                import ast
+                try:
+                    metadata = ast.literal_eval(metadata)
+                except (ValueError, SyntaxError):
+                    metadata = None
+            
             if metadata:
                 raw = self.documentation_collection.query(
                     query_texts=[question],
