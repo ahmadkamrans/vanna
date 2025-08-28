@@ -95,7 +95,7 @@ class ChromaDB_VectorStore(VannaBase):
             documents=documentation,
             embeddings=self.generate_embedding(documentation),
             ids=id,
-            metadata=document_metadata
+            metadatas=document_metadata
         )
         return id
 
